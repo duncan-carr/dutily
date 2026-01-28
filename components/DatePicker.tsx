@@ -51,7 +51,11 @@ function isValidDate(date: Date | undefined) {
   return !isNaN(date.getTime());
 }
 
-export function WeekSelector() {
+interface WeekSelectorProps {
+  onWeekChange?: (sundayDate: Date) => void;
+}
+
+export function WeekSelector({ onWeekChange }: WeekSelectorProps) {
   const [open, setOpen] = React.useState(false);
   // Initialize with the Sunday of the current week
   const [date, setDate] = React.useState<Date | undefined>(
@@ -59,6 +63,13 @@ export function WeekSelector() {
   );
   const [month, setMonth] = React.useState<Date | undefined>(date);
   const [value, setValue] = React.useState(formatDate(date));
+
+  // Notify parent when date changes
+  React.useEffect(() => {
+    if (date && onWeekChange) {
+      onWeekChange(date);
+    }
+  }, [date, onWeekChange]);
 
   const handleSelect = (selectedDate: Date | undefined) => {
     if (selectedDate) {

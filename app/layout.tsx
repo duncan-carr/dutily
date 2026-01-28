@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
 import ConvexClientProvider from "@/components/ConvexClientProvider";
+import { CalendarDays } from "lucide-react";
+import { SignOutButton } from "@/components/SignOutButton";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -32,7 +34,16 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <ConvexClientProvider>{children}</ConvexClientProvider>
+          <ConvexClientProvider>
+            <header className="sticky top-0 z-10 bg-background/80 backdrop-blur-md px-4 py-2 flex flex-row justify-between items-center border-b">
+              <div className="flex items-center gap-2">
+                <CalendarDays className="size-6" />
+                <h1 className="font-semibold">Dutily</h1>
+              </div>
+              <SignOutButton />
+            </header>
+            {children}
+          </ConvexClientProvider>
         </body>
       </html>
     </ConvexAuthNextjsServerProvider>
