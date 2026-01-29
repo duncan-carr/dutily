@@ -10,4 +10,19 @@ export default defineSchema({
   numbers: defineTable({
     value: v.number(),
   }),
+  buildings: defineTable({
+    name: v.string(),
+  }),
+  shifts: defineTable({
+    building: v.id("buildings"),
+    startTime: v.string(),
+    endTime: v.string(),
+    shiftType: v.union(
+      v.literal("desk"),
+      v.literal("coverage"),
+      v.literal("night_monitor"),
+      v.literal("weekend"),
+    ),
+    assignedTo: v.id("users"),
+  }),
 });

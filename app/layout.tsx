@@ -5,6 +5,12 @@ import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
 import ConvexClientProvider from "@/components/ConvexClientProvider";
 import { CalendarDays } from "lucide-react";
 import { SignOutButton } from "@/components/SignOutButton";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/AppSidebar";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -35,14 +41,16 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <ConvexClientProvider>
-            <header className="sticky top-0 z-10 bg-background/80 backdrop-blur-md px-4 py-2 flex flex-row justify-between items-center border-b">
-              <div className="flex items-center gap-2">
-                <CalendarDays className="size-6" />
-                <h1 className="font-semibold">Dutily</h1>
-              </div>
-              <SignOutButton />
-            </header>
-            {children}
+            <SidebarProvider>
+              <AppSidebar />
+              <SidebarInset>
+                <header className="flex h-16 shrink-0 items-center gap-2 border-b px-3 justify-between">
+                  <SidebarTrigger />
+                  <SignOutButton />
+                </header>
+                {children}
+              </SidebarInset>
+            </SidebarProvider>
           </ConvexClientProvider>
         </body>
       </html>

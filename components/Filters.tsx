@@ -11,19 +11,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Calendar, List } from "lucide-react";
+import { Copy, Plus, PlusCircle } from "lucide-react";
+import { Button } from "./ui/button";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
 interface FiltersProps {
   onWeekChange?: (sundayDate: Date) => void;
 }
 
 export function Filters({ onWeekChange }: FiltersProps) {
+  const user = useQuery(api.users.viewer);
+
   return (
     <div className="flex flex-row gap-4 w-full">
       {/* <ToggleGroup variant="outline" defaultValue="list" type="single">
@@ -83,6 +89,34 @@ export function Filters({ onWeekChange }: FiltersProps) {
           </SelectGroup>
         </SelectContent>
       </Select>
+
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild className="cursor-pointer">
+          <Button>
+            <Plus />
+            Subscribe
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem
+            onClick={async () => {
+              await navigator.clipboard.writeText(
+                `localhost:3000/api/calendar/${user?._id}`,
+              );
+            }}
+            className="cursor-pointer"
+          >
+            <Copy />
+            Copy URL
+          </DropdownMenuItem>
+          <a href={`webcal://localhost:3000/api/calendar/${user?._id}`}>
+            <DropdownMenuItem className="cursor-pointer">
+              <PlusCircle />
+              Open in Calendar
+            </DropdownMenuItem>
+          </a>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 }

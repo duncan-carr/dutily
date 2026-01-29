@@ -18,15 +18,7 @@ function getSunday(date: Date): Date {
 }
 
 function getWeekDates(sunday: Date): WeekDay[] {
-  const dayNames = [
-    "SUN",
-    "MON",
-    "TUE",
-    "WED",
-    "THU",
-    "FRI",
-    "SAT",
-  ];
+  const dayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
   return Array.from({ length: 7 }, (_, i) => {
     const date = new Date(sunday);
@@ -56,8 +48,6 @@ export default function Home() {
 
   return (
     <main className="flex">
-      <section className="border-r h-screen w-64"></section>
-
       <section className="p-8 flex-1">
         <Filters onWeekChange={handleWeekChange} />
 
