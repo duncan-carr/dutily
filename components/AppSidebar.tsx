@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { Calendar } from "lucide-react";
 
@@ -16,6 +18,8 @@ import {
 } from "@/components/ui/sidebar";
 import { Badge } from "./ui/badge";
 import { Separator } from "./ui/separator";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
 const data = {
   navMain: [
@@ -60,11 +64,11 @@ const adminData = {
         },
         {
           title: "Employees",
-          url: "#",
+          url: "/admin/employees",
         },
         {
           title: "Configuration",
-          url: "#",
+          url: "/admin/configuration",
           isActive: true,
         },
       ],
@@ -73,6 +77,8 @@ const adminData = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const user = useQuery(api.users.row);
+
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -125,39 +131,52 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarMenu>
         </SidebarGroup>
         {/* TODO: Restrict view if not authorized */}
-        <Separator />
-        <SidebarGroup>
-          <SidebarMenu>
-            {adminData.navMain.map((item) => (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild>
-                  <p className="font-medium">{item.title}</p>
-                </SidebarMenuButton>
+        {user?.role === "admin" && (
+          <>
+            <Separator />
+            <SidebarGroup>
+              <SidebarMenu>
+                {adminData.navMain.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <p className="font-medium">{item.title}</p>
+                    </SidebarMenuButton>
 
-                {item.items?.length ? (
-                  <SidebarMenuSub>
-                    {item.items.map((item) => (
-                      <SidebarMenuSubItem key={item.title}>
-                        <SidebarMenuSubButton asChild isActive={item.isActive}>
-                          <a href={item.url} className="flex justify-between">
-                            {item.title}
-                            {/* TODO: Pull # of open shifts from DB */}
-                            {item.title === "Open Shifts" && (
-                              <Badge className="w-5 h-5" variant={"default"}>
-                                {/* Switch variant to destructive to grab attention? */}
-                                4
-                              </Badge>
-                            )}
-                          </a>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
-                    ))}
-                  </SidebarMenuSub>
-                ) : null}
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-        </SidebarGroup>
+                    {item.items?.length ? (
+                      <SidebarMenuSub>
+                        {item.items.map((item) => (
+                          <SidebarMenuSubItem key={item.title}>
+                            <SidebarMenuSubButton
+                              asChild
+                              isActive={item.isActive}
+                            >
+                              <a
+                                href={item.url}
+                                className="flex justify-between"
+                              >
+                                {item.title}
+                                {/* TODO: Pull # of open shifts from DB */}
+                                {item.title === "Open Shifts" && (
+                                  <Badge
+                                    className="w-5 h-5"
+                                    variant={"default"}
+                                  >
+                                    {/* Switch variant to destructive to grab attention? */}
+                                    4
+                                  </Badge>
+                                )}
+                              </a>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    ) : null}
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroup>
+          </>
+        )}
       </SidebarContent>
       <SidebarRail />
     </Sidebar>

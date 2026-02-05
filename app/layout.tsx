@@ -48,7 +48,7 @@ export default function RootLayout({
                   <SidebarTrigger />
                   <SignOutButton />
                 </header>
-                {children}
+                <main className="p-4">{children}</main>
               </SidebarInset>
             </SidebarProvider>
           </ConvexClientProvider>

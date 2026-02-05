@@ -7,6 +7,25 @@ import { authTables } from "@convex-dev/auth/server";
 // The schema provides more precise TypeScript types.
 export default defineSchema({
   ...authTables,
+  users: defineTable({
+    name: v.optional(v.string()),
+    image: v.optional(v.string()),
+    email: v.optional(v.string()),
+    emailVerificationTime: v.optional(v.number()),
+    phone: v.optional(v.string()),
+    phoneVerificationTime: v.optional(v.number()),
+    isAnonymous: v.optional(v.boolean()),
+    role: v.optional(
+      v.union(
+        v.literal("admin"),
+        v.literal("hall_director"),
+        v.literal("community_assistant"),
+        v.literal("night_monitor"),
+      ),
+    ),
+  })
+    .index("email", ["email"])
+    .index("phone", ["phone"]),
   numbers: defineTable({
     value: v.number(),
   }),
@@ -24,5 +43,10 @@ export default defineSchema({
       v.literal("weekend"),
     ),
     assignedTo: v.id("users"),
+  }),
+  terms: defineTable({
+    name: v.string(),
+    startDate: v.string(),
+    endDate: v.string(),
   }),
 });
